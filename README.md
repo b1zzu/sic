@@ -1,3 +1,1 @@
-# Command Line SafeInCloud Client
-
-
+# Command Line Tool for SafeInCloud
