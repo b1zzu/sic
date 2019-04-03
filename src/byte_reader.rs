@@ -69,7 +69,7 @@ mod tests {
         let mut r = vec![0x02, 0xAA, 0xBB, 0xCC];
         let mut r = r.as_slice();
 
-        r.read_u8();
+        let _ = r.read_u8();
         assert_eq!(r.read_u8_vec_to_end().unwrap(), vec![0xAA, 0xBB, 0xCC]);
     }
 }
