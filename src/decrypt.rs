@@ -1,6 +1,6 @@
 use std::io::Read;
 
-use crate::byte_reader::ByteRead;
+use crate::utils::byte_read::ByteRead;
 
 mod utils {
     use std::io;
