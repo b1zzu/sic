@@ -40,6 +40,7 @@ mod utils {
     }
 }
 
+/// Simple function to decrypt a SafeInCloud.db
 fn decrypt(mut r: impl Read, password: &[u8]) -> Vec<u8> {
     let _ = r.read_be_u16();
 
