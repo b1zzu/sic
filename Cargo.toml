@@ -5,3 +5,7 @@ authors = ["b1zzu"]
 edition = "2018"
 
 [dependencies]
+rust-crypto = "0.2.36"
+libflate = "0.1.21"
+regex = "1.1.5"
+
