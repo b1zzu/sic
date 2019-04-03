@@ -1,4 +1,4 @@
-mod decrypt;
+mod database;
 mod utils;
 mod commands;
 
