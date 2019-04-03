@@ -41,20 +41,20 @@ mod utils {
 }
 
 /// Simple function to decrypt a SafeInCloud.db
-fn decrypt(mut r: impl Read, password: &[u8]) -> Vec<u8> {
-    let _ = r.read_be_u16();
+fn decrypt(mut source: impl Read, password: &[u8]) -> Vec<u8> {
+    let _ = source.read_be_u16();
 
-    let _ = r.read_u8();
+    let _ = source.read_u8();
 
-    let salt = r.read_u8_vec().unwrap();
+    let salt = source.read_u8_vec().unwrap();
 
     let key = utils::pbkdf2(password, &salt, 10000, 32);
 
-    let iv = r.read_u8_vec().unwrap();
+    let iv = source.read_u8_vec().unwrap();
 
-    let _ = r.read_u8_vec();
+    let _ = source.read_u8_vec();
 
-    let block = r.read_u8_vec().unwrap();
+    let block = source.read_u8_vec().unwrap();
     let block = utils::aes(&key, &iv, &block).unwrap();
     let mut block = block.as_slice();
 
@@ -64,7 +64,7 @@ fn decrypt(mut r: impl Read, password: &[u8]) -> Vec<u8> {
 
     let _ = block.read_u8_vec();
 
-    let block2 = r.read_u8_vec_to_end().unwrap();
+    let block2 = source.read_u8_vec_to_end().unwrap();
     let block2 = utils::aes(&key2, &iv2, &block2).unwrap();
 
     utils::zlib(&block2).unwrap()
