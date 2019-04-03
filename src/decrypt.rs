@@ -28,7 +28,7 @@ mod utils {
         let mut bytes = vec![0u8; data.len()];
         let mut read = RefReadBuffer::new(&data);
         let mut write = RefWriteBuffer::new(&mut bytes);
-        let result = cipher.decrypt(&mut read, &mut write, true)?;
+        cipher.decrypt(&mut read, &mut write, true)?;
         Ok(bytes)
     }
 
@@ -72,8 +72,6 @@ fn decrypt(mut r: impl Read, password: &[u8]) -> Vec<u8> {
 #[cfg(test)]
 mod tests {
     use std::fs::File;
-    use std::path::Path;
-    use std::str;
 
     use regex::Regex;
 
