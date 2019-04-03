@@ -40,7 +40,7 @@ mod tests {
 
     #[test]
     fn test_read_u8() {
-        let mut r = vec![0x0F, 0xF0];
+        let r = vec![0x0F, 0xF0];
         let mut r = r.as_slice();
 
         assert_eq!(r.read_u8().unwrap(), 15);
@@ -49,7 +49,7 @@ mod tests {
 
     #[test]
     fn test_read_be_u16() {
-        let mut r = vec![0x0F, 0xF0, 0x12, 0xA1];
+        let r = vec![0x0F, 0xF0, 0x12, 0xA1];
         let mut r = r.as_slice();
 
         assert_eq!(r.read_be_u16().unwrap(), 4080);
@@ -58,7 +58,7 @@ mod tests {
 
     #[test]
     fn test_read_u8_vec() {
-        let mut r = vec![0x02, 0xAA, 0xBB, 0xCC];
+        let r = vec![0x02, 0xAA, 0xBB, 0xCC];
         let mut r = r.as_slice();
 
         assert_eq!(r.read_u8_vec().unwrap(), vec![0xAA, 0xBB]);
@@ -66,7 +66,7 @@ mod tests {
 
     #[test]
     fn test_read_u8_vec_to_end() {
-        let mut r = vec![0x02, 0xAA, 0xBB, 0xCC];
+        let r = vec![0x02, 0xAA, 0xBB, 0xCC];
         let mut r = r.as_slice();
 
         let _ = r.read_u8();
