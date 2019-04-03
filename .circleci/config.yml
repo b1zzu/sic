@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   test:
     docker:
@@ -6,3 +6,7 @@ jobs:
     steps:
       - checkout
       - run: cargo test
+workflow:
+  main:
+    jobs:
+      - test
