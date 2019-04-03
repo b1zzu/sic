@@ -7,7 +7,23 @@ use xml::reader::XmlEvent::{CData, Characters, Comment, EndDocument, EndElement,
 
 use crate::database::card::Card;
 
+use super::field;
 use super::field::Field;
+
+fn parse_field_type(tipo: String) -> field::Type {
+    match tipo.as_str() {
+        "login" => field::Type::Login,
+        "password" => field::Type::Password,
+        "pin" => field::Type::Pin,
+        "number" => field::Type::Number,
+        "text" => field::Type::Text,
+        "expiry" => field::Type::Expiry,
+        "phone" => field::Type::Phone,
+        "website" => field::Type::Website,
+        "date" => field::Type::Date,
+        _ => panic!("unhandled field type: {}", tipo)
+    }
+}
 
 fn parse_field(attributes: Vec<OwnedAttribute>) -> Field {
     let mut name = None;
@@ -20,7 +36,7 @@ fn parse_field(attributes: Vec<OwnedAttribute>) -> Field {
                 name = Some(attribute.value);
             }
             "type" => {
-                tipo = Some(attribute.value);
+                tipo = Some(parse_field_type(attribute.value));
             }
             "autofill" => {
                 autofill = Some(attribute.value);
@@ -151,11 +167,11 @@ mod tests {
         let facebook_password = facebook.get_field("Password").unwrap();
 
         assert_eq!(facebook_login.get_value().unwrap(), "john555@gmail.com");
-        assert_eq!(facebook_login.get_type(), "login");
+        assert_eq!(facebook_login.get_type(), field::Type::Login);
         assert_eq!(facebook_login.get_autofill(), "username");
 
         assert_eq!(facebook_password.get_value().unwrap(), "early91*Fail*");
-        assert_eq!(facebook_password.get_type(), "password");
+        assert_eq!(facebook_password.get_type(), field::Type::Password);
         assert_eq!(facebook_password.get_autofill(), "current-password");
     }
 }

@@ -1,13 +1,26 @@
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub enum Type {
+    Login,
+    Password,
+    Number,
+    Text,
+    Expiry,
+    Pin,
+    Phone,
+    Website,
+    Date,
+}
+
 #[derive(Debug)]
 pub struct Field {
     name: String,
-    tipo: String,
+    tipo: Type,
     autofill: String,
     value: Option<String>,
 }
 
 impl Field {
-    pub fn new(name: String, tipo: String, autofill: String) -> Field {
+    pub fn new(name: String, tipo: Type, autofill: String) -> Field {
         Field { name, tipo, autofill, value: None }
     }
 
@@ -15,8 +28,8 @@ impl Field {
         &self.name
     }
 
-    pub fn get_type(&self) -> &str {
-        &self.tipo
+    pub fn get_type(&self) -> Type {
+        self.tipo
     }
 
     pub fn get_autofill(&self) -> &str {
