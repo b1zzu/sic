@@ -41,7 +41,7 @@ mod utils {
 }
 
 /// Simple function to decrypt a SafeInCloud.db
-fn decrypt(mut source: impl Read, password: &[u8]) -> Vec<u8> {
+pub fn decrypt(mut source: impl Read, password: &[u8]) -> Vec<u8> {
     let _ = source.read_be_u16();
 
     let _ = source.read_u8();
@@ -67,7 +67,12 @@ fn decrypt(mut source: impl Read, password: &[u8]) -> Vec<u8> {
     let block2 = source.read_u8_vec_to_end().unwrap();
     let block2 = utils::aes(&key2, &iv2, &block2).unwrap();
 
-    utils::zlib(&block2).unwrap()
+    let block2 = utils::zlib(&block2).unwrap();
+
+    let mut block2 = block2.as_slice();
+    block2.strip_utf8_bom().unwrap();
+
+    block2.to_vec()
 }
 
 #[cfg(test)]
@@ -87,10 +92,7 @@ mod tests {
 
         let result = decrypt(&mut file, password.as_bytes());
 
-        // assert utf-8 bom
-        assert_eq!(&result[..3], [0xEF, 0xBB, 0xBF]);
-
-        let result = String::from_utf8(result[3..].to_vec()).unwrap();
+        let result = String::from_utf8(result).unwrap();
         assert!(Regex::new(r"^<\?xml.*\?>\r\n<database>[\s\S]*</database>$").unwrap().is_match(&result));
     }
 }
