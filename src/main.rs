@@ -1,9 +1,8 @@
-use std::env;
 use std::path::{Path, PathBuf};
 
 use clap::{App, Arg, SubCommand};
 
-use crate::commands::cards::cards;
+use commands::cards::cards;
 
 mod database;
 mod utils;
