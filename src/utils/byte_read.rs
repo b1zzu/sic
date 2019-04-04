@@ -48,6 +48,14 @@ mod tests {
     }
 
     #[test]
+    fn test_read_u8_unexpected_eof() {
+        let r = vec![];
+        let mut r = r.as_slice();
+
+        assert!(r.read_u8().is_err());
+    }
+
+    #[test]
     fn test_read_be_u16() {
         let r = vec![0x0F, 0xF0, 0x12, 0xA1];
         let mut r = r.as_slice();
@@ -57,11 +65,28 @@ mod tests {
     }
 
     #[test]
+    fn test_read_be_u16_unexpected_eof() {
+        let r = vec![0x0F];
+        let mut r = r.as_slice();
+
+        assert!(r.read_be_u16().is_err());
+    }
+
+
+    #[test]
     fn test_read_u8_vec() {
         let r = vec![0x02, 0xAA, 0xBB, 0xCC];
         let mut r = r.as_slice();
 
         assert_eq!(r.read_u8_vec().unwrap(), vec![0xAA, 0xBB]);
+    }
+
+    #[test]
+    fn test_read_u8_vec_unexpected_eof() {
+        let r = vec![0x02, 0xAA];
+        let mut r = r.as_slice();
+
+        assert!(r.read_u8_vec().is_err());
     }
 
     #[test]
