@@ -15,7 +15,7 @@ impl Card {
         Card { title, id, template, deleted, tipo, fields: Vec::new() }
     }
 
-    pub fn get_title(&self) -> &str {
+    pub fn get_title(&self) -> &String {
         &self.title
     }
 

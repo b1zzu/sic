@@ -4,6 +4,8 @@ use clap::{App, Arg, SubCommand};
 
 use commands::cards::cards;
 
+use crate::commands::cards::Options;
+
 mod database;
 mod utils;
 mod commands;
@@ -18,7 +20,11 @@ fn main() {
             .help("Set a custom path to the SafeInCloud db")
             .takes_value(true))
         .subcommand(SubCommand::with_name("cards")
-            .about("print all cards"))
+            .about("Print all cards")
+            .arg(Arg::with_name("passwords")
+                .long("passwords")
+                .short("p")
+                .help("Print passwords, pins and secrets")))
         .get_matches();
 
     let database = match matches.value_of("db") {
@@ -26,7 +32,7 @@ fn main() {
         None => dirs::home_dir().unwrap_or(PathBuf::new()).join("./.SafeInCloud.db"),
     };
 
-    if let Some(_) = matches.subcommand_matches("cards") {
-        cards(database);
+    if let Some(matches) = matches.subcommand_matches("cards") {
+        cards(database, Options { passwords: matches.is_present("passwords") });
     }
 }

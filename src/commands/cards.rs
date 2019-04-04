@@ -3,7 +3,11 @@ use std::path::PathBuf;
 
 use crate::database::{decrypt, field, parse};
 
-pub fn cards(database: PathBuf) {
+pub struct Options {
+    pub passwords: bool
+}
+
+pub fn cards(database: PathBuf, options: Options) {
     let database = File::open(database).unwrap();
 
     let password = rpassword::read_password_from_tty(Some("Password: ")).unwrap();
@@ -14,15 +18,32 @@ pub fn cards(database: PathBuf) {
 
     println!();
     for card in database {
-        println!("==");
-        println!("- Title: {}", card.get_title());
-        println!("- Id:    {}", card.get_id());
+        print!("{:12} | {:24}", card.get_id(), card.get_title());
+
+        let mut i = 0;
         for field in card.get_fields() {
-            match field.get_type() {
-                field::Type::Password => println!("{}: ******", field.get_name()),
-                _ => println!("{}: {}", field.get_name(), field.get_value().unwrap_or(&String::new()))
+            i += 1;
+            if i > 3 {
+                break;
             }
+
+            let blank = String::new();
+
+            let value = match field.get_type() {
+                field::Type::Password | field::Type::Secret | field::Type::Pin => {
+                    if options.passwords {
+                        field.get_value().unwrap_or(&blank)
+                    } else {
+                        "******"
+                    }
+                }
+                _ => field.get_value().unwrap_or(&blank)
+            };
+
+            print!(" | {:12}: {:32}", field.get_name(), value);
         }
+
+        println!();
     }
 }
 
