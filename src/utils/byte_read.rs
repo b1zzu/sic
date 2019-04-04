@@ -5,14 +5,14 @@ pub trait ByteRead: Read {
     /// Read one byte
     fn read_u8(&mut self) -> Result<u8> {
         let mut bytes = [0; 1];
-        self.read(&mut bytes)?;
+        self.read_exact(&mut bytes)?;
         Ok(bytes[0])
     }
 
     /// Read two bytes and convert them in u16 using BigEndian
     fn read_be_u16(&mut self) -> Result<u16> {
         let mut bytes = [0; 2];
-        self.read(&mut bytes)?;
+        self.read_exact(&mut bytes)?;
         Ok(u16::from_be_bytes(bytes))
     }
 
@@ -20,7 +20,7 @@ pub trait ByteRead: Read {
     fn read_u8_vec(&mut self) -> Result<Vec<u8>> {
         let size = self.read_u8()?;
         let mut bytes = vec![0; size as usize];
-        self.read(&mut bytes)?;
+        self.read_exact(&mut bytes)?;
         Ok(bytes)
     }
 
