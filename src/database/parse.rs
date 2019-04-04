@@ -1,4 +1,5 @@
 use std::io::Read;
+use std::result;
 use std::str::FromStr;
 
 use xml::attribute::OwnedAttribute;
@@ -9,6 +10,26 @@ use crate::database::card::Card;
 
 use super::field;
 use super::field::Field;
+
+#[derive(Debug)]
+struct Error {
+    error: String,
+}
+
+impl Error {
+    fn new(error: String) -> Error {
+        Error { error }
+    }
+}
+
+type Result<T> = result::Result<T, Error>;
+
+fn to_result<T>(value: Option<T>, error: &str) -> Result<T> {
+    match value {
+        Some(value) => Ok(value),
+        None => Err(Error::new(error.to_string())),
+    }
+}
 
 fn parse_field_type(tipo: String) -> field::Type {
     match tipo.as_str() {
@@ -21,11 +42,14 @@ fn parse_field_type(tipo: String) -> field::Type {
         "phone" => field::Type::Phone,
         "website" => field::Type::Website,
         "date" => field::Type::Date,
+        "email" => field::Type::Email,
+        "application" => field::Type::Application,
+        "secret" => field::Type::Secret,
         _ => panic!("unhandled field type: {}", tipo)
     }
 }
 
-fn parse_field(attributes: Vec<OwnedAttribute>) -> Field {
+fn parse_field(attributes: Vec<OwnedAttribute>) -> Result<Field> {
     let mut name = None;
     let mut tipo = None;
     let mut autofill = None;
@@ -41,19 +65,22 @@ fn parse_field(attributes: Vec<OwnedAttribute>) -> Field {
             "autofill" => {
                 autofill = Some(attribute.value);
             }
-            "score" | "hash" => {
+            "score" | "hash" | "history" => {
                 // ignore
             }
             _ => {
-                panic!("unhandled attribute: {:?}", attribute);
+                panic!("unhandled attribute in field: {:?}", attribute);
             }
         }
     }
 
-    Field::new(name.unwrap(), tipo.unwrap(), autofill.unwrap())
+    let name = to_result(name, "name in field is None")?;
+    let tipo = to_result(tipo, "type in field is None")?;
+
+    Ok(Field::new(name, tipo, autofill))
 }
 
-fn parse_card(attributes: Vec<OwnedAttribute>) -> Card {
+fn parse_card(attributes: Vec<OwnedAttribute>) -> Result<Card> {
     let mut title = None;
     let mut id = None;
     let mut template = false;
@@ -77,25 +104,23 @@ fn parse_card(attributes: Vec<OwnedAttribute>) -> Card {
             "type" => {
                 tipo = Some(attribute.value);
             }
-            "symbol" | "color" | "time_stamp" => {
+            "symbol" | "color" | "time_stamp" | "website_icon" | "star" => {
                 // ignore
             }
             _ => {
-                panic!("unhandled attribute: {:?}", attribute)
+                panic!("unhandled attribute in card: {:?}", attribute)
             }
         }
     }
 
-    Card::new(title.unwrap(), id.unwrap(), template, deleted, tipo)
+    let title = to_result(title, "title in card is None")?;
+    let id = to_result(id, "id in card is None")?;
+
+    Ok(Card::new(title, id, template, deleted, tipo))
 }
 
-enum Element {
-    None,
-    Field(Field),
-    Card(Card),
-}
 
-fn parse(source: impl Read) -> Vec<Card> {
+pub fn parse(source: impl Read) -> Vec<Card> {
     let reader = EventReader::new(source);
 
     let mut cards = Vec::new();
@@ -105,12 +130,12 @@ fn parse(source: impl Read) -> Vec<Card> {
             StartElement { name, attributes, .. } => {
                 match name.local_name.as_str() {
                     "card" => {
-                        cards.push(parse_card(attributes));
+                        cards.push(parse_card(attributes).unwrap());
                     }
                     "field" => {
-                        cards.last_mut().unwrap().add_field(parse_field(attributes));
+                        cards.last_mut().unwrap().add_field(parse_field(attributes).unwrap());
                     }
-                    "database" | "label" | "label_id" | "notes" => {
+                    "database" | "label" | "label_id" | "notes" | "ghost" | "custom_icon" => {
                         // ignore
                     }
                     _ => {
@@ -168,10 +193,10 @@ mod tests {
 
         assert_eq!(facebook_login.get_value().unwrap(), "john555@gmail.com");
         assert_eq!(facebook_login.get_type(), field::Type::Login);
-        assert_eq!(facebook_login.get_autofill(), "username");
+        assert_eq!(facebook_login.get_autofill().unwrap(), "username");
 
         assert_eq!(facebook_password.get_value().unwrap(), "early91*Fail*");
         assert_eq!(facebook_password.get_type(), field::Type::Password);
-        assert_eq!(facebook_password.get_autofill(), "current-password");
+        assert_eq!(facebook_password.get_autofill().unwrap(), "current-password");
     }
 }

@@ -9,18 +9,21 @@ pub enum Type {
     Phone,
     Website,
     Date,
+    Email,
+    Application,
+    Secret,
 }
 
 #[derive(Debug)]
 pub struct Field {
     name: String,
     tipo: Type,
-    autofill: String,
+    autofill: Option<String>,
     value: Option<String>,
 }
 
 impl Field {
-    pub fn new(name: String, tipo: Type, autofill: String) -> Field {
+    pub fn new(name: String, tipo: Type, autofill: Option<String>) -> Field {
         Field { name, tipo, autofill, value: None }
     }
 
@@ -32,15 +35,12 @@ impl Field {
         self.tipo
     }
 
-    pub fn get_autofill(&self) -> &str {
-        &self.autofill
+    pub fn get_autofill(&self) -> Option<&String> {
+        self.autofill.as_ref()
     }
 
-    pub fn get_value(&self) -> Option<&str> {
-        match &self.value {
-            Some(tipo) => Some(tipo),
-            None => None,
-        }
+    pub fn get_value(&self) -> Option<&String> {
+        self.value.as_ref()
     }
 
     pub fn set_value(&mut self, value: String) {
