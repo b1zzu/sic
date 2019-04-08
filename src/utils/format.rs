@@ -1,6 +1,6 @@
 type Table = Vec<Vec<(Option<String>, String)>>;
 
-fn table(table: Table) -> String {
+pub fn table(table: Table) -> String {
     let mut measurements: Vec<(usize, usize)> = Vec::new();
     for row in &table {
         for (i, (left, right)) in row.iter().enumerate() {
