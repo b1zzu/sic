@@ -1,10 +1,7 @@
-use std::fs::File;
 use std::path::PathBuf;
 
-use crate::database::{decrypt, field};
-use crate::database::card::Card;
 use crate::database::database::Database;
-use crate::utils::{format, password};
+use crate::utils::format;
 
 pub struct Options {
     passwords: bool,
@@ -23,10 +20,6 @@ pub fn cards(database: PathBuf, options: Options) {
 
 #[cfg(test)]
 mod tests {
-    use std::path::Path;
-
-    use super::*;
-
     #[test]
     fn test_cards() {}
 }

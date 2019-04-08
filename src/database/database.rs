@@ -97,8 +97,6 @@ impl Database {
                     break;
                 }
 
-                let mask = "******";
-
                 let value = match field.get_type() {
                     field::Type::Password | field::Type::Secret | field::Type::Pin => {
                         if passwords {

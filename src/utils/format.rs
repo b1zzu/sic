@@ -51,8 +51,6 @@ pub fn table(table: Table) -> String {
 
 #[cfg(test)]
 mod test {
-    use regex::Regex;
-
     use super::*;
 
     #[test]
