@@ -2,7 +2,8 @@ use std::fs::File;
 use std::path::PathBuf;
 
 use crate::database::{decrypt, field, helper, parse};
-use crate::utils::password;
+use crate::database::card::Card;
+use crate::utils::{format, password};
 
 pub struct Options {
     passwords: bool,
@@ -14,12 +15,14 @@ impl Options {
     }
 }
 
-pub fn cards(database: PathBuf, options: Options) {
-    let database = helper::open(database, None);
+fn to_table(database: Vec<Card>, options: Options) -> format::Table {
+    let mut table = Vec::new();
 
-    println!();
     for card in database {
-        print!("{:12} | {:24}", card.get_id(), card.get_title());
+        let mut row = Vec::new();
+
+        row.push((None, card.get_id().to_string()));
+        row.push((None, card.get_title().to_string()));
 
         let mut i = 0;
         for field in card.get_fields() {
@@ -28,24 +31,35 @@ pub fn cards(database: PathBuf, options: Options) {
                 break;
             }
 
-            let blank = String::new();
+            let mask = "******";
 
             let value = match field.get_type() {
                 field::Type::Password | field::Type::Secret | field::Type::Pin => {
                     if options.passwords {
-                        field.get_value().unwrap_or(&blank)
+                        field.get_value()
                     } else {
-                        "******"
+                        Some("******")
                     }
                 }
-                _ => field.get_value().unwrap_or(&blank)
+                _ => field.get_value()
             };
+            let value = value.unwrap_or("").to_string();
 
-            print!(" | {:12}: {:32}", field.get_name(), value);
+            let name = field.get_name().to_string().clone();
+
+            row.push((Some(name), value));
         }
 
-        println!();
+        table.push(row);
     }
+
+    table
+}
+
+pub fn cards(database: PathBuf, options: Options) {
+    let database = helper::open(database, None);
+    let table = to_table(database, options);
+    println!("{}", format::table(table))
 }
 
 #[cfg(test)]
@@ -55,9 +69,5 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_cards() {
-        // TODO: Use mock
-//        let database = Path::new("./samples/SafeInCloud.db");
-//        cards(database.to_path_buf());
-    }
+    fn test_cards() {}
 }

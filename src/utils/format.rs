@@ -1,8 +1,11 @@
-type Table = Vec<Vec<(Option<String>, String)>>;
+pub type Table = Vec<Vec<(Option<String>, String)>>;
 
-pub fn table(table: Table) -> String {
-    let mut measurements: Vec<(usize, usize)> = Vec::new();
-    for row in &table {
+type Measurements = Vec<(usize, usize)>;
+
+fn measurements(table: &Table) -> Measurements {
+    let mut measurements = Vec::new();
+
+    for row in table {
         for (i, (left, right)) in row.iter().enumerate() {
             let left = match left {
                 Some(left) => left.len() + 2,
@@ -22,7 +25,12 @@ pub fn table(table: Table) -> String {
             }
         }
     }
-    let measurements = measurements;
+
+    measurements
+}
+
+pub fn table(table: Table) -> String {
+    let measurements = measurements(&table);
 
     let mut rows = Vec::new();
     for row in table {
