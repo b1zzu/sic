@@ -1,3 +1,5 @@
+use crate::utils::option;
+
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Type {
     Login,
@@ -35,12 +37,12 @@ impl Field {
         self.tipo
     }
 
-    pub fn get_autofill(&self) -> Option<&String> {
-        self.autofill.as_ref()
+    pub fn get_autofill(&self) -> Option<&str> {
+        option::as_str(&self.autofill)
     }
 
-    pub fn get_value(&self) -> Option<&String> {
-        self.value.as_ref()
+    pub fn get_value(&self) -> Option<&str> {
+        option::as_str(&self.value)
     }
 
     pub fn set_value(&mut self, value: String) {

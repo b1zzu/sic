@@ -1,3 +1,5 @@
+use crate::utils::option;
+
 use super::field::Field;
 
 #[derive(Debug)]
@@ -15,7 +17,7 @@ impl Card {
         Card { title, id, template, deleted, tipo, fields: Vec::new() }
     }
 
-    pub fn get_title(&self) -> &String {
+    pub fn get_title(&self) -> &str {
         &self.title
     }
 
@@ -32,10 +34,7 @@ impl Card {
     }
 
     pub fn get_type(&self) -> Option<&str> {
-        match &self.tipo {
-            Some(tipo) => Some(tipo),
-            None => None,
-        }
+        option::as_str(&self.tipo)
     }
 
     pub fn get_fields(&self) -> &[Field] {
