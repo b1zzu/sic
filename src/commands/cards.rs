@@ -1,20 +1,21 @@
 use std::fs::File;
 use std::path::PathBuf;
 
-use crate::database::{decrypt, field, parse};
+use crate::database::{decrypt, field, helper, parse};
+use crate::utils::password;
 
 pub struct Options {
-    pub passwords: bool
+    passwords: bool,
+}
+
+impl Options {
+    pub fn new(passwords: bool) -> Self {
+        Options { passwords }
+    }
 }
 
 pub fn cards(database: PathBuf, options: Options) {
-    let database = File::open(database).unwrap();
-
-    let password = rpassword::read_password_from_tty(Some("Password: ")).unwrap();
-
-    let database = decrypt::decrypt(database, password.as_bytes());
-
-    let database = parse::parse(database.as_slice());
+    let database = helper::open(database, None);
 
     println!();
     for card in database {

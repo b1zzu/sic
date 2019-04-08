@@ -2,9 +2,7 @@ use std::path::{Path, PathBuf};
 
 use clap::{App, Arg, SubCommand};
 
-use commands::cards::cards;
-
-use crate::commands::cards::Options;
+use commands::cards;
 
 mod database;
 mod utils;
@@ -14,8 +12,9 @@ fn main() {
     let matches = App::new("sic")
         .version("1.0")
         .about("Command Line Tool for SafeInCloud")
-        .arg(Arg::with_name("db")
-            .long("db")
+        .arg(Arg::with_name("database")
+            .long("database")
+            .short("b")
             .value_name("FILE")
             .help("Set a custom path to the SafeInCloud db")
             .takes_value(true))
@@ -27,12 +26,13 @@ fn main() {
                 .help("Print passwords, pins and secrets")))
         .get_matches();
 
-    let database = match matches.value_of("db") {
+    // Get the path of the SafeInCloud database from the command line or from the default path
+    let database = match matches.value_of("database") {
         Some(database) => Path::new(database).to_path_buf(),
-        None => dirs::home_dir().unwrap_or(PathBuf::new()).join("./.SafeInCloud.db"),
+        None => dirs::home_dir().unwrap_or(PathBuf::new()).join("./.SafeInCloud.db")
     };
 
     if let Some(matches) = matches.subcommand_matches("cards") {
-        cards(database, Options { passwords: matches.is_present("passwords") });
+        cards::cards(database, cards::Options::new(matches.is_present("passwords")));
     }
 }
