@@ -1,8 +1,9 @@
 use std::fs::File;
 use std::path::PathBuf;
 
-use crate::database::{decrypt, field, helper, parse};
+use crate::database::{decrypt, field};
 use crate::database::card::Card;
+use crate::database::database::Database;
 use crate::utils::{format, password};
 
 pub struct Options {
@@ -15,10 +16,10 @@ impl Options {
     }
 }
 
-fn to_table(database: Vec<Card>, options: Options) -> format::Table {
+fn to_table(cards: &Vec<Card>, options: Options) -> format::Table {
     let mut table = Vec::new();
 
-    for card in database {
+    for card in cards {
         let mut row = Vec::new();
 
         row.push((None, card.get_id().to_string()));
@@ -57,8 +58,8 @@ fn to_table(database: Vec<Card>, options: Options) -> format::Table {
 }
 
 pub fn cards(database: PathBuf, options: Options) {
-    let database = helper::open(database, None);
-    let table = to_table(database, options);
+    let database = Database::open(database, None);
+    let table = to_table(database.get_cards(), options);
     println!("{}", format::table(table))
 }
 
