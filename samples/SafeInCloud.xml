@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database>
+    <!-- LABELS -->
+    <label name="Business" id="1" />
+    <label name="Private" id="2" />
+    <label name="Samples" id="3" />
+    <label name="Web Accounts" id="4" type="web_accounts" />
+    <!-- TEMPLATES -->
+    <card title="Credit Card" id="101" symbol="credit_card" color="gray" template="true">
+        <field name="Number" type="number" autofill="cc-number" />
+        <field name="Owner" type="text" autofill="cc-name" />
+        <field name="Expires" type="expiry" autofill="cc-exp" />
+        <field name="CVV" type="pin" autofill="cc-csc" />
+        <field name="PIN" type="pin" autofill="off" />
+        <field name="Blocking" type="phone" autofill="off" />
+    </card>
+    <card title="Web Account" id="102" symbol="web_site" color="gray" template="true">
+        <field name="Login" type="login" autofill="username" />
+        <field name="Password" type="password" autofill="current-password" />
+        <field name="Website" type="website" autofill="url" />
+    </card>
+    <card title="Email Account" id="103" symbol="email" color="gray" template="true">
+        <field name="Email" type="login" autofill="username" />
+        <field name="Password" type="password" autofill="current-password" />
+        <field name="Website" type="website" autofill="url" />
+    </card>
+    <card title="Login/Password" id="104" symbol="key" color="gray" template="true">
+        <field name="Login" type="login" autofill="username" />
+        <field name="Password" type="password" autofill="current-password" />
+    </card>
+    <card title="Code" id="100" symbol="lock" color="gray" template="true">
+        <field name="Code" type="password" autofill="current-password" />
+    </card>
+    <card title="ID/Passport" id="105" symbol="id" color="gray" template="true">
+        <field name="Number" type="number" autofill="off" />
+        <field name="Name" type="text" autofill="off" />
+        <field name="Birthday" type="date" autofill="off" />
+        <field name="Issued" type="date" autofill="off" />
+        <field name="Expires" type="expiry" autofill="off" />
+    </card>
+    <card title="Insurance" id="106" symbol="insurance" color="gray" template="true">
+        <field name="Number" type="number" autofill="off" />
+        <field name="Expires" type="expiry" autofill="off" />
+        <field name="Phone" type="phone" autofill="off" />
+    </card>
+    <card title="Membership" id="107" symbol="membership" color="gray" template="true">
+        <field name="Number" type="number" autofill="off" />
+        <field name="Login" type="login" autofill="username" />
+        <field name="Password" type="password" autofill="current-password" />
+        <field name="Website" type="website" autofill="url" />
+        <field name="Phone" type="phone" autofill="off" />
+    </card>
+    <!-- NEW TEMPLATES -->
+    <card title="Bank Account" id="108" symbol="bank" color="gray" template="true">
+        <field name="Bank" type="text" autofill="off" />
+        <field name="Holder" type="text" autofill="off" />
+        <field name="Account" type="number" autofill="off" />
+        <field name="Type" type="text" autofill="off" />
+        <field name="SWIFT" type="text" autofill="off" />
+        <field name="IBAN" type="text" autofill="off" />
+        <field name="Phone" type="phone" autofill="off" />
+        <field name="Login" type="login" autofill="username" />
+        <field name="Password" type="password" autofill="current-password" />
+        <field name="Website" type="website" autofill="url" />
+    </card>
+    <card title="Driving License" id="109" symbol="id" color="gray" template="true">
+        <field name="Number" type="text" autofill="off" />
+        <field name="Name" type="text" autofill="off" />
+        <field name="Birthday" type="date" autofill="off" />
+        <field name="Class" type="text" autofill="off" />
+        <field name="Expires" type="expiry" autofill="off" />
+    </card>
+    <card title="Social Security" id="110" symbol="social_security" color="gray" template="true">
+        <field name="Number" type="number" autofill="off" />
+        <field name="Name" type="text" autofill="off" />
+    </card>
+    <card title="Wifi Router" id="111" symbol="router" color="gray" template="true">
+        <field name="Network" type="text" autofill="off" />
+        <field name="IP address" type="number" autofill="off" />
+        <field name="Admin password" type="password" autofill="off" />
+        <field name="Wifi password" type="password" autofill="current-password" />
+    </card>
+    <card title="Internet Provider" id="112" symbol="network" color="gray" template="true">
+        <field name="Protocol" type="text" autofill="off" />
+        <field name="Login" type="login" autofill="username" />
+        <field name="Password" type="password" autofill="current-password" />
+        <field name="DNS" type="number" autofill="off" />
+        <field name="DNS 2" type="number" autofill="off" />
+    </card>
+    <card title="Software License" id="113" symbol="cd" color="gray" template="true">
+        <field name="Email" type="login" autofill="username" />
+        <field name="Password" type="password" autofill="current-password" />
+        <field name="Key" type="text" autofill="off" />
+        <field name="Website" type="website" autofill="url" />
+    </card>
+    <card title="Another" id="114" color="gray" template="true"></card>
+    <!-- SAMPLES -->
+    <card title="Passport (Sample)" id="203" symbol="passport" color="purple" deleted="true" time_stamp="1554299816349">
+        <field name="Number" type="number" autofill="off">555111111</field>
+        <field name="Name" type="text" autofill="off">John Smith</field>
+        <field name="Birthday" type="date" autofill="off">05/05/1980</field>
+        <field name="Issued" type="date" autofill="off">01/01/2018</field>
+        <field name="Expires" type="expiry" autofill="off">01/01/2028</field>
+        <label_id>3</label_id>
+    </card>
+    <card title="Note (Sample)" id="206" symbol="note" color="yellow" type="note" deleted="true" time_stamp="1554299826399">
+        <notes>This is a sample note.</notes>
+        <label_id>3</label_id>
+    </card>
+    <card title="Facebook" id="301" symbol="f" color="0xff3f5ca8" time_stamp="1554299834249">
+        <field name="Login" type="login" autofill="username">john555@gmail.com</field>
+        <field name="Password" type="password" autofill="current-password" score="4" hash="9ecc32e4a90c7c82634d22640adc1a10">early91*Fail*</field>
+        <field name="Website" type="website" autofill="url">https://www.facebook.com</field>
+        <label_id>3</label_id>
+    </card>
+    <card title="Google" id="300" symbol="g" color="blue" time_stamp="1554299842534">
+        <field name="Email" type="login" autofill="username">john555@gmail.com</field>
+        <field name="Password" type="password" autofill="current-password" score="4" hash="5c76cb4d2fd87820be94530315581e14">plain79{Area{</field>
+        <field name="Website" type="website" autofill="url">https://www.google.com</field>
+        <label_id>3</label_id>
+    </card>
+    <card title="Laptop" id="303" symbol="laptop" color="gray" time_stamp="1554299850339">
+        <field name="Login" type="login" autofill="username">john555</field>
+        <field name="Password" type="password" autofill="current-password" score="4" hash="c26f1a5e5b1589001b18e18784539d70">Save63\apple\</field>
+        <label_id>3</label_id>
+    </card>
+    <card title="Twitter" id="302" symbol="t" color="blue" time_stamp="1554299856014">
+        <field name="Login" type="login" autofill="username">john555@gmail.com</field>
+        <field name="Password" type="password" autofill="current-password" score="4" hash="e5ce079406ef1e2ed46172d3625218b2">Best23^Get^</field>
+        <field name="Website" type="website" autofill="url">https://twitter.com</field>
+        <label_id>3</label_id>
+    </card>
+    <card title="Visa Card" id="205" symbol="visa" color="0xff3f5ca8" time_stamp="1554299860830">
+        <field name="Number" type="number" autofill="cc-number">5555123456789000</field>
+        <field name="Owner" type="text" autofill="cc-name">John Smith</field>
+        <field name="Expires" type="expiry" autofill="cc-exp" score="1675209599000" hash="17e3b5c87119a57b9ad34dab6b70e6bb">01/23</field>
+        <field name="CVV" type="pin" autofill="cc-csc">555</field>
+        <field name="PIN" type="pin" autofill="off">1111</field>
+        <field name="Blocking" type="phone" autofill="off">555-0153</field>
+        <label_id>3</label_id>
+    </card>
+</database>
