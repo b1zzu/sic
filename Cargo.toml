@@ -1,6 +1,6 @@
 [package]
 name = "sic"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["b1zzu"]
 edition = "2018"
 
