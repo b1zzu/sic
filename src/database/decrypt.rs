@@ -1,5 +1,6 @@
 use std::io::Read;
 
+use crate::database::decrypt::utils::strip_utf8_bom;
 use crate::utils::byte_read::ByteRead;
 
 mod utils {
@@ -15,6 +16,8 @@ mod utils {
     use crypto::sha1::Sha1;
     use crypto::symmetriccipher::{Decryptor, SymmetricCipherError};
     use libflate::zlib::Decoder;
+
+    use crate::utils::byte_read::ByteRead;
 
     pub fn pbkdf2(password: &[u8], salt: &[u8], c: u32, size: usize) -> Vec<u8> {
         let mut bytes = vec![0; size];
@@ -38,6 +41,13 @@ mod utils {
         let mut decoder = Decoder::new(data)?;
         decoder.read_to_end(&mut bytes)?;
         Ok(bytes)
+    }
+
+    pub fn strip_utf8_bom(mut data: Vec<u8>) -> Vec<u8> {
+        if data.get(..3) == Some(&[0xEF, 0xBB, 0xBF]) {
+            data.drain(..3);
+        }
+        data
     }
 }
 
@@ -70,10 +80,7 @@ pub fn decrypt(mut source: impl Read, password: &[u8]) -> Vec<u8> {
 
     let block2 = utils::zlib(&block2).unwrap();
 
-    let mut block2 = block2.as_slice();
-    block2.strip_utf8_bom().unwrap();
-
-    block2.to_vec()
+    strip_utf8_bom(block2)
 }
 
 #[cfg(test)]

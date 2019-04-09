@@ -31,17 +31,6 @@ pub trait ByteRead: Read {
         self.read_to_end(&mut bytes)?;
         Ok(bytes)
     }
-
-    /// Verify that the utf-8 bom is present and strip it away
-    fn strip_utf8_bom(&mut self) -> Result<()> {
-        let mut bytes = [0; 3];
-        self.read_exact(&mut bytes)?;
-        if bytes == [0xEF, 0xBB, 0xBF] {
-            Ok(())
-        } else {
-            Err(Error::new(ErrorKind::Other, "UTF-8 BOM not found"))
-        }
-    }
 }
 
 impl<T: Read> ByteRead for T {}
@@ -107,22 +96,5 @@ mod tests {
 
         let _ = r.read_u8();
         assert_eq!(r.read_u8_vec_to_end().unwrap(), vec![0xAA, 0xBB, 0xCC]);
-    }
-
-    #[test]
-    fn test_strip_utf8_bom() {
-        let r = vec![0xEF, 0xBB, 0xBF, 0xAA];
-        let mut r = r.as_slice();
-
-        assert!(r.strip_utf8_bom().is_ok());
-        assert_eq!(r.read_u8().unwrap(), 0xAA);
-    }
-
-    #[test]
-    fn test_strip_utf8_bom_error() {
-        let r = vec![0xEF, 0xCB, 0xBF, 0xAA];
-        let mut r = r.as_slice();
-
-        assert!(r.strip_utf8_bom().is_err());
     }
 }
