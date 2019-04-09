@@ -11,6 +11,7 @@ jobs:
       - image: rust:latest
     steps:
       - checkout
+      - run: rustup component add rustfmt
       - run: cargo fmt -- --check
 workflows:
   main:
