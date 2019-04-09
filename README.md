@@ -1,1 +1,15 @@
 # Command Line Tool for SafeInCloud
+
+## Installing SIC
+
+First you need to install Cargo. Cargo is distributed by default with Rust. Follow this tutorial to install
+Rust: [Get Started](https://www.rust-lang.org/learn/get-started).
+
+Then install SIC using Cargo:
+```bash
+cargo install --git https://github.com/b1zzu/sic --tag 0.1.0
+```
+
+## Documentation
+
+`sic help` to get Usage, Options and Commands documentation.
