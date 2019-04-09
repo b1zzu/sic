@@ -1,6 +1,6 @@
-use std::io::{ErrorKind, Read};
 use std::io::Error;
 use std::io::Result;
+use std::io::{ErrorKind, Read};
 
 pub trait ByteRead: Read {
     /// Read one byte
@@ -83,7 +83,6 @@ mod tests {
 
         assert!(r.read_be_u16().is_err());
     }
-
 
     #[test]
     fn test_read_u8_vec() {

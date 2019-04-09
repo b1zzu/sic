@@ -2,8 +2,8 @@ use xml::attribute::OwnedAttribute;
 
 use crate::utils::option;
 
-use super::result::Result;
 use super::result::to_result;
+use super::result::Result;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Type {
@@ -36,7 +36,7 @@ impl Type {
             "email" => Type::Email,
             "application" => Type::Application,
             "secret" => Type::Secret,
-            _ => panic!("unhandled field type: {}", tipo)
+            _ => panic!("unhandled field type: {}", tipo),
         }
     }
 }
@@ -51,7 +51,12 @@ pub struct Field {
 
 impl Field {
     pub fn new(name: String, tipo: Type, autofill: Option<String>) -> Self {
-        Field { name, tipo, autofill, value: None }
+        Field {
+            name,
+            tipo,
+            autofill,
+            value: None,
+        }
     }
 
     pub fn parse(attributes: Vec<OwnedAttribute>) -> Result<Self> {
