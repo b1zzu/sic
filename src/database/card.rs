@@ -19,8 +19,21 @@ pub struct Card {
 }
 
 impl Card {
-    pub fn new(title: String, id: u32, template: bool, deleted: bool, tipo: Option<String>) -> Card {
-        Card { title, id, template, deleted, tipo, fields: Vec::new() }
+    pub fn new(
+        title: String,
+        id: u32,
+        template: bool,
+        deleted: bool,
+        tipo: Option<String>,
+    ) -> Card {
+        Card {
+            title,
+            id,
+            template,
+            deleted,
+            tipo,
+            fields: Vec::new(),
+        }
     }
 
     pub fn parse(attributes: Vec<OwnedAttribute>) -> Result<Card> {
@@ -50,9 +63,7 @@ impl Card {
                 "symbol" | "color" | "time_stamp" | "website_icon" | "star" => {
                     // ignore
                 }
-                _ => {
-                    panic!("unhandled attribute in card: {:?}", attribute)
-                }
+                _ => panic!("unhandled attribute in card: {:?}", attribute),
             }
         }
 

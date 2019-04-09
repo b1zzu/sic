@@ -24,7 +24,8 @@ mod utils {
     }
 
     pub fn aes(key: &[u8], iv: &[u8], data: &[u8]) -> Result<Vec<u8>, SymmetricCipherError> {
-        let mut cipher: Box<Decryptor> = aes::cbc_decryptor(KeySize::KeySize256, &key, &iv, NoPadding);
+        let mut cipher: Box<Decryptor> =
+            aes::cbc_decryptor(KeySize::KeySize256, &key, &iv, NoPadding);
         let mut bytes = vec![0u8; data.len()];
         let mut read = RefReadBuffer::new(&data);
         let mut write = RefWriteBuffer::new(&mut bytes);
@@ -93,6 +94,8 @@ mod tests {
         let result = decrypt(&mut file, password.as_bytes());
 
         let result = String::from_utf8(result).unwrap();
-        assert!(Regex::new(r"^<\?xml.*\?>\r\n<database>[\s\S]*</database>$").unwrap().is_match(&result));
+        assert!(Regex::new(r"^<\?xml.*\?>\r\n<database>[\s\S]*</database>$")
+            .unwrap()
+            .is_match(&result));
     }
 }

@@ -2,8 +2,11 @@ use std::fs::File;
 use std::io::Read;
 use std::path::PathBuf;
 
+use xml::reader::XmlEvent::{
+    CData, Characters, Comment, EndDocument, EndElement, ProcessingInstruction, StartDocument,
+    StartElement, Whitespace,
+};
 use xml::EventReader;
-use xml::reader::XmlEvent::{CData, Characters, Comment, EndDocument, EndElement, ProcessingInstruction, StartDocument, StartElement, Whitespace};
 
 use crate::database::decrypt::decrypt;
 use crate::database::field::Field;
@@ -13,7 +16,7 @@ use super::card::Card;
 use super::field;
 
 pub struct Database {
-    cards: Vec<Card>
+    cards: Vec<Card>,
 }
 
 impl Database {
@@ -24,20 +27,23 @@ impl Database {
 
         for event in reader {
             match event.unwrap() {
-                StartElement { name, attributes, .. } => {
+                StartElement {
+                    name, attributes, ..
+                } => {
                     match name.local_name.as_str() {
                         "card" => {
                             cards.push(Card::parse(attributes).unwrap());
                         }
                         "field" => {
-                            cards.last_mut().unwrap().add_field(Field::parse(attributes).unwrap());
+                            cards
+                                .last_mut()
+                                .unwrap()
+                                .add_field(Field::parse(attributes).unwrap());
                         }
                         "database" | "label" | "label_id" | "notes" | "ghost" | "custom_icon" => {
                             // ignore
                         }
-                        _ => {
-                            panic!("unhandled element: {:?}", name)
-                        }
+                        _ => panic!("unhandled element: {:?}", name),
                     }
                 }
                 Characters(characters) => {
@@ -62,7 +68,10 @@ impl Database {
         }
 
         // clean deleted cards and templates
-        let cards = cards.into_iter().filter(|card| !card.is_deleted() && !card.is_template()).collect();
+        let cards = cards
+            .into_iter()
+            .filter(|card| !card.is_deleted() && !card.is_template())
+            .collect();
 
         Database { cards }
     }
@@ -90,9 +99,7 @@ impl Database {
             row.push((None, card.get_id().to_string()));
             row.push((None, card.get_title().to_string()));
 
-            let mut i = 0;
-            for field in card.get_fields() {
-                i += 1;
+            for (i, field) in card.get_fields().iter().enumerate() {
                 if i > 3 {
                     break;
                 }
@@ -105,7 +112,7 @@ impl Database {
                             Some("******")
                         }
                     }
-                    _ => field.get_value()
+                    _ => field.get_value(),
                 };
                 let value = value.unwrap_or("").to_string();
 
@@ -120,7 +127,6 @@ impl Database {
         table
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -139,13 +145,19 @@ mod tests {
         let cards = database.get_cards();
 
         // templates are removed
-        assert!(cards.iter().find(|card| card.get_title() == "Login/Password").is_none());
+        assert!(cards
+            .iter()
+            .find(|card| card.get_title() == "Login/Password")
+            .is_none());
 
         // test exact number of cards
         assert_eq!(cards.len(), 5);
 
         // test fields of one card
-        let facebook = cards.iter().find(|card| card.get_title() == "Facebook").unwrap();
+        let facebook = cards
+            .iter()
+            .find(|card| card.get_title() == "Facebook")
+            .unwrap();
         let facebook_login = facebook.get_field("Login").unwrap();
         let facebook_password = facebook.get_field("Password").unwrap();
 
@@ -155,7 +167,10 @@ mod tests {
 
         assert_eq!(facebook_password.get_value().unwrap(), "early91*Fail*");
         assert_eq!(facebook_password.get_type(), field::Type::Password);
-        assert_eq!(facebook_password.get_autofill().unwrap(), "current-password");
+        assert_eq!(
+            facebook_password.get_autofill().unwrap(),
+            "current-password"
+        );
     }
 
     #[test]

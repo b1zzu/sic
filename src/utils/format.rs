@@ -9,7 +9,7 @@ fn measurements(table: &Table) -> Measurements {
         for (i, (left, right)) in row.iter().enumerate() {
             let left = match left {
                 Some(left) => left.len() + 2,
-                None => 0
+                None => 0,
             };
             let right = right.len();
             let measurement = measurements.get(i);
@@ -56,8 +56,16 @@ mod test {
     #[test]
     fn test_table() {
         let t = vec![
-            vec![(None, "1".to_string()), (None, "Facebook".to_string()), (Some("Login".to_string()), "fantastic@email.com".to_string())],
-            vec![(None, "27".to_string()), (None, "GMail".to_string()), (Some("Password".to_string()), "*******".to_string())],
+            vec![
+                (None, "1".to_string()),
+                (None, "Facebook".to_string()),
+                (Some("Login".to_string()), "fantastic@email.com".to_string()),
+            ],
+            vec![
+                (None, "27".to_string()),
+                (None, "GMail".to_string()),
+                (Some("Password".to_string()), "*******".to_string()),
+            ],
         ];
 
         let expected = "\
