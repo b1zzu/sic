@@ -13,3 +13,7 @@ cargo install --git https://github.com/b1zzu/sic --tag 0.1.0
 ## Documentation
 
 `sic help` to get Usage, Options and Commands documentation.
+
+## Contributing
+
+Feel free to open new issues, to propose new features, fork the project and create new pull request.
