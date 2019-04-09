@@ -13,8 +13,17 @@ jobs:
       - checkout
       - run: rustup component add rustfmt
       - run: cargo fmt -- --check
+  rpm:
+    docker:
+      - image: b1zzu/sic:fedora-rpmbuild-rust
+    steps:
+      - checkout
+      - run: cargo rpm build
 workflows:
-  main:
+  verify:
     jobs:
       - test
       - fmt
+  build:
+    jobs:
+      - rpm
