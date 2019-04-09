@@ -10,7 +10,7 @@ mod utils;
 
 fn main() {
     let matches = App::new("sic")
-        .version("1.0")
+        .version("0.1.1")
         .about("Command Line Tool for SafeInCloud")
         .arg(
             Arg::with_name("database")
