@@ -6,7 +6,14 @@ jobs:
     steps:
       - checkout
       - run: cargo test
+  fmt:
+    docker:
+      - image: rust:latest
+    steps:
+      - checkout
+      - run: cargo fmt -- --check
 workflows:
   main:
     jobs:
       - test
+      - fmt
