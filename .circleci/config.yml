@@ -18,10 +18,10 @@ jobs:
       - image: b1zzu/sic:fedora-rpmbuild-rust
     steps:
       - checkout
-      - attach_workspace:
-          at: ./artifacts
+      - attach_workspace: ./artifacts
       - run: cargo build
       - run: cargo rpm build
+      - run: find target/release/rpmbuild
       - run: cp target/release/rpmbuild/RPMs/*/*.rpm artifacts/
   release:
     docker:
