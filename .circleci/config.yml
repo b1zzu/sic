@@ -40,5 +40,5 @@ workflows:
             - fmt
             - test
       - release:
-          requres:
+          requires:
             - rpm
