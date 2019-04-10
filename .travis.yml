@@ -1,5 +1,15 @@
 language: rust
-rust:
-  - stable
+
 cache:
   cargo
+
+rust:
+  - stable
+
+before_script:
+  - cargo install rustfmt
+
+script:
+  - cargo fmt -- --check
+  - cargo build --verbose
+  - cargo test --verbose
