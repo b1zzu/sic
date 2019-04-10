@@ -5,7 +5,15 @@ jobs:
       - image: rust:latest
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-target-{{ .Branch }}
+            - v1-target-
       - run: cargo test
+      - save_cache:
+          key: v1-target-{{ .Branch }}
+          paths:
+            - target
   fmt:
     docker:
       - image: rust:latest
@@ -18,6 +26,10 @@ jobs:
       - image: b1zzu/sic:fedora-rpmbuild-rust
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-target-{{ .Branch }}
+            - v1-target-
       - run:
           command: |
             cargo build
@@ -26,6 +38,10 @@ jobs:
           root: target/release/rpmbuild/RPMS/x86_64/
           paths:
             - sic-0.1.1-1.x86_64.rpm
+      - save_cache:
+          key: v1-target-{{ .Branch }}
+          paths:
+            - target
   release:
     docker:
       - image: b1zzu/sic:ghr
