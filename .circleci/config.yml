@@ -48,7 +48,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ./artifacts
-      - run: ghr -u ${CIRCLE_PROJECT_USERNAME} 0.1.1 artifacts/
+      - run: ghr -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} 0.1.1 artifacts/
 workflows:
   main:
     jobs:
