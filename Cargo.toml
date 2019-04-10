@@ -1,6 +1,8 @@
 [package]
 name = "sic"
 version = "0.1.1"
+description = "Command Line Tool for SafeInCloud"
+license-file = "LICENSE"
 authors = ["b1zzu"]
 edition = "2018"
 
@@ -12,3 +14,9 @@ clap = "2.32.0"
 xml-rs = "0.8.0"
 dirs = "1.0.5"
 rpassword = "3.0.1"
+
+[package.metadata.rpm.cargo]
+buildflags = ["--release"]
+
+[package.metadata.rpm.targets]
+sic = { path = "/usr/bin/sic" }

@@ -5,7 +5,15 @@ jobs:
       - image: rust:latest
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-target-{{ .Branch }}
+            - v1-target-
       - run: cargo test
+      - save_cache:
+          key: v1-target-{{ .Branch }}
+          paths:
+            - target
   fmt:
     docker:
       - image: rust:latest
@@ -13,8 +21,53 @@ jobs:
       - checkout
       - run: rustup component add rustfmt
       - run: cargo fmt -- --check
+  rpm:
+    docker:
+      - image: b1zzu/sic:fedora-rpmbuild-rust
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-target-{{ .Branch }}
+            - v1-target-
+      - run:
+          command: |
+            cargo build
+            cargo rpm build
+      - persist_to_workspace:
+          root: target/release/rpmbuild/RPMS/x86_64/
+          paths:
+            - sic-${CIRCLE_TAG}-1.x86_64.rpm
+      - save_cache:
+          key: v1-target-{{ .Branch }}
+          paths:
+            - target
+  release:
+    docker:
+      - image: b1zzu/sic:ghr
+    steps:
+      - attach_workspace:
+          at: ./artifacts
+      - run: ghr -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} artifacts/
 workflows:
   main:
     jobs:
       - test
       - fmt
+      - rpm:
+          requires:
+            - fmt
+            - test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+      - release:
+          requires:
+            - rpm
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^\d+\.\d+\.\d+$/
