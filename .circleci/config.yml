@@ -31,10 +31,14 @@ jobs:
           at: ./artifacts
       - run: ls -al ./artifacts
 workflows:
-  verify:
+  main:
     jobs:
       - test
       - fmt
-  build:
-    jobs:
-      - rpm
+      - rpm:
+          requires:
+            - fmt
+            - test
+      - release:
+          requres:
+            - rpm
