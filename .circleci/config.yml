@@ -42,12 +42,12 @@ workflows:
           requires:
             - fmt
             - test
-          filters:
-            tags:
-              only: /^\d+\.\d+\.\d+$/
+#          filters:
+#            tags:
+#              only: /^\d+\.\d+\.\d+$/
       - release:
           requires:
             - rpm
-          filters:
-            tags:
-              only: /^\d+\.\d+\.\d+$/
+#          filters:
+#            tags:
+#              only: /^\d+\.\d+\.\d+$/
