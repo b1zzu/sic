@@ -11,3 +11,7 @@ RUN curl https://sh.rustup.rs -sSf -o /rust-init.sh \
  && rm /rust-init.sh
 
 RUN cargo install cargo-rpm
+
+RUN mkdir /project
+
+WORKDIR /project

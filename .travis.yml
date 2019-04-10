@@ -1,10 +1,10 @@
 language: rust
 
+services:
+  - docker
+
 cache:
   cargo
-
-rust:
-  - stable
 
 before_script:
   - cargo install --force rustfmt
@@ -13,3 +13,14 @@ script:
   - cargo fmt -- --check
   - cargo build --verbose
   - cargo test --verbose
+
+before_deploy:
+  - docker run -it --rm -v ${PWD}:/project b1zzu/sic:fedora-rpmbuild-rust cargo rpm build
+
+deploy:
+  provider: releases
+  api_key: ${GITHUB_TOKEN}
+  file: target/release/rpmbuild/RPMS/x86_64/sic-${TRAVIS_TAG}-1.x86_64.rpm
+  skip_cleanup: true
+  on:
+    tags: true
