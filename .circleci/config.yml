@@ -20,10 +20,11 @@ jobs:
     - checkout
     - attach_workspace:
         at: ./artifacts
-    - run: cargo build
-    - run: cargo rpm build
-    - run: find target/release/rpmbuild
-    - run: cp target/release/rpmbuild/RPMs/*/*.rpm artifacts/
+    - run:
+        command: |
+          cargo build
+          cargo rpm build
+          cp target/release/rpmbuild/RPMS/x86_64/sic-*.x86_64.rpm artifacts/
   release:
     docker:
     - image: b1zzu/sic:ghr
