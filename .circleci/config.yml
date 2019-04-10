@@ -25,15 +25,14 @@ jobs:
       - persist_to_workspace:
           root: target/release/rpmbuild/RPMS/x86_64/
           paths:
-            - sic-*.x86_64.rpm
+            - sic-0.1.1-1.x86_64.rpm
   release:
     docker:
       - image: b1zzu/sic:ghr
     steps:
       - attach_workspace:
           at: ./artifacts
-      - run: ls -al ./artifacts
-      - run: env
+      - run: ghr 0.1.1 artifacts/
 workflows:
   main:
     jobs:
@@ -43,9 +42,9 @@ workflows:
           requires:
             - fmt
             - test
-#          filters:
-#            tags:
-#              only: /^\d+\.\d+\.\d+$/
+      #          filters:
+      #            tags:
+      #              only: /^\d+\.\d+\.\d+$/
       - release:
           requires:
             - rpm
