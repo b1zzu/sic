@@ -37,7 +37,7 @@ jobs:
       - persist_to_workspace:
           root: target/release/rpmbuild/RPMS/x86_64/
           paths:
-            - sic-0.1.1-1.x86_64.rpm
+            - sic-${CIRCLE_TAG}-1.x86_64.rpm
       - save_cache:
           key: v1-target-{{ .Branch }}
           paths:
@@ -48,7 +48,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ./artifacts
-      - run: ghr -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} 0.1.1 artifacts/
+      - run: ghr -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} artifacts/
 workflows:
   main:
     jobs:
@@ -58,12 +58,12 @@ workflows:
           requires:
             - fmt
             - test
-      #          filters:
-      #            tags:
-      #              only: /^\d+\.\d+\.\d+$/
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
       - release:
           requires:
             - rpm
-#          filters:
-#            tags:
-#              only: /^\d+\.\d+\.\d+$/
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
