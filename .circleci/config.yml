@@ -17,9 +17,19 @@ jobs:
     docker:
       - image: b1zzu/sic:fedora-rpmbuild-rust
     steps:
+      - attach_workspace:
+          at: ./artifacts
       - checkout
       - run: cargo build
       - run: cargo rpm build
+      - run: cp target/release/rpmbuild/RPMs/*/*.rpm artifacts/
+  release:
+    docker:
+      - image: b1zzu/sic:ghr
+    steps:
+      - attach_workspace:
+          at: ./artifacts
+      - run: ls -al ./artifacts
 workflows:
   verify:
     jobs:
