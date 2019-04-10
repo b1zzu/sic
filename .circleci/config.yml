@@ -19,7 +19,7 @@ jobs:
     steps:
     - checkout
     - attach_workspace:
-      at: ./artifacts
+        at: ./artifacts
     - run: cargo build
     - run: cargo rpm build
     - run: find target/release/rpmbuild
