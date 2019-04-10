@@ -7,7 +7,7 @@ Rust: [Get Started](https://www.rust-lang.org/learn/get-started).
 
 Then install SIC using Cargo:
 ```bash
-cargo install --git https://github.com/b1zzu/sic --tag 0.1.0
+cargo install --git https://github.com/b1zzu/sic --tag 0.1.2
 ```
 
 ## Documentation
