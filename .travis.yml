@@ -6,7 +6,7 @@ services:
 cache:
   cargo
 
-before_script:
+install:
   - rustup component add rustfmt
 
 script:
