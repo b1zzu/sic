@@ -7,7 +7,7 @@ cache:
   cargo
 
 before_script:
-  - cargo install --force rustfmt
+  - rustup component add rustfmt
 
 script:
   - cargo fmt -- --check
