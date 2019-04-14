@@ -66,4 +66,10 @@ mod test {
         let result = fuzzy(&["Facebook", "Book", "other"], "book");
         assert_eq!(result, vec![&"book", &"Facebook"])
     }
+
+    #[test]
+    fn test_fuzzy_order_of_needle() {
+        let result = fuzzy(&["Facebook"], "ko");
+        assert_eq!(result.len(), 0)
+    }
 }
