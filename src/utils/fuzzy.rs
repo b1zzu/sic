@@ -18,6 +18,7 @@ mod test {
 
     #[test]
     fn test_fuzzy() {
-        fuzzy(&["one", "two"], "wo");
+        let result = fuzzy(&["Facebook", "Twitter", "Baked"], "ak");
+        assert_eq!(result, vec!["Baked", "Facebook"]);
     }
 }
