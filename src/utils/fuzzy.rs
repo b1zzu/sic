@@ -1,3 +1,4 @@
+
 pub trait Searchable {
     fn value(&self) -> &str;
 }
@@ -28,6 +29,7 @@ pub fn fuzzy<'a, T: Searchable>(stack: &'a [T], needle: &str) -> Vec<&'a T> {
                         p
                     };
                     s.last = p;
+                    v = &v[p..]
                 }
                 None => {
                     s.points = 0;
