@@ -1,4 +1,3 @@
-
 pub trait Searchable {
     fn value(&self) -> &str;
 }
@@ -21,7 +20,7 @@ pub fn fuzzy<'a, T: Searchable>(stack: &'a [T], needle: &str) -> Vec<&'a T> {
         let mut s = S::new(o);
         let mut v = o.value();
         for n in needle.chars() {
-            match v.find(n) {
+            match v.chars().position(|c| c.to_lowercase().eq(n.to_lowercase())) {
                 Some(p) => {
                     s.points += if s.last + 1 == p {
                         p - s.last
@@ -66,7 +65,7 @@ mod test {
     #[test]
     fn test_fuzzy_same_match_different_position() {
         let result = fuzzy(&["Facebook", "Book", "other"], "book");
-        assert_eq!(result, vec![&"book", &"Facebook"])
+        assert_eq!(result, vec![&"Book", &"Facebook"])
     }
 
     #[test]
